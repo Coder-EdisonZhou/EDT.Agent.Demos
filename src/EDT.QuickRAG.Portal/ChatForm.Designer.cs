@@ -1,6 +1,6 @@
 ﻿namespace EDT.QuickRAG.Portal;
 
-partial class AgentForm
+partial class ChatForm
 {
     /// <summary>
     ///  Required designer variable.

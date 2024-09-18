@@ -18,7 +18,7 @@ namespace EDT.QuickRAG.Portal;
 #pragma warning disable SKEXP0001
 #pragma warning disable SKEXP0020
 #pragma warning disable SKEXP0010
-public partial class AgentForm : Form
+public partial class ChatForm : Form
 {
     private Kernel _kernel = null;
     private ChatHistory _chatHistory = null;
@@ -27,7 +27,7 @@ public partial class AgentForm : Form
     private int _textChunkerLinesToken;
     private int _textChunkerParagraphsToken;
 
-    public AgentForm()
+    public ChatForm()
     {
         InitializeComponent();
     }

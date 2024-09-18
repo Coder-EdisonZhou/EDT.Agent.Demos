@@ -2,12 +2,12 @@
 
 namespace EDT.WorkOrderAgent.Shared.Handlers;
 
-public class CustomLlmApiHandler : HttpClientHandler
+public class OpenAiHttpHandler : HttpClientHandler
 {
     private readonly string _openAiProvider;
     private readonly string _openAiBaseAddress;
 
-    public CustomLlmApiHandler(string openAiProvider, string openAiBaseAddress)
+    public OpenAiHttpHandler(string openAiProvider, string openAiBaseAddress)
     {
         _openAiProvider = openAiProvider;
         _openAiBaseAddress = openAiBaseAddress;

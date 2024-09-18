@@ -143,3 +143,6 @@ UpgradeLog*.XML
 /src/.vs/EDT.WorkOrderAgent/FileContentIndex/516bdcaf-db5d-4b8a-96ce-a37c42c3570b.vsidx
 /src/.vs/EDT.WorkOrderAgent/config/applicationhost.config
 /src/.vs/EDT.WorkOrderAgent/v17/DocumentLayout.json
+/src/.vs/EDT.WorkOrderAgent/DesignTimeBuild/*.v2
+/src/.vs/EDT.WorkOrderAgent/FileContentIndex/*.vsidx
+/src/.vs/EDT.WorkOrderAgent/v17/*.v2

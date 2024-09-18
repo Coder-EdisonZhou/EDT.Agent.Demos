@@ -5,6 +5,7 @@ using Microsoft.SemanticKernel;
 using EDT.WorkOrderAgent.Shared.Configurations;
 using EDT.WorkOrderAgent.Shared.Handlers;
 using EDT.WorkOrderAgent.Service;
+using EDT.WorkOrderAgent.Shared.FunctionCallers;
 
 namespace EDT.WorkOrderAgent.Portal;
 
@@ -12,7 +13,6 @@ public partial class AgentForm : Form
 {
     private Kernel _kernel = null;
     private OpenAIPromptExecutionSettings _settings = null;
-    private IChatCompletionService _chatCompletion = null;
     private ChatHistory _chatHistory = null;
 
     public AgentForm()
@@ -22,22 +22,19 @@ public partial class AgentForm : Form
 
     private void AgentForm_Load(object sender, EventArgs e)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.json");
+        var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.Local.json");
         var config = configuration.Build();
         var openAiConfiguration = new OpenAiConfiguration(
             config.GetSection("LLM_API_PROVIDER").Value,
             config.GetSection("LLM_API_MODEL").Value,
             config.GetSection("LLM_API_BASE_URL").Value,
             config.GetSection("LLM_API_KEY").Value);
-        var openAiClient = new HttpClient(new CustomLlmApiHandler(openAiConfiguration.Provider, openAiConfiguration.EndPoint));
+        var openAiClient = new HttpClient(new OpenAiHttpHandler(openAiConfiguration.Provider, openAiConfiguration.EndPoint));
         _kernel = Kernel.CreateBuilder()
             .AddOpenAIChatCompletion(openAiConfiguration.ModelId, openAiConfiguration.ApiKey, httpClient: openAiClient)
             .Build();
 
-        _chatCompletion = _kernel.GetRequiredService<IChatCompletionService>();
-
         _chatHistory = new ChatHistory();
-        _chatHistory.AddSystemMessage("You are one WorkOrder Assistant.");
     }
 
     /// <summary>
@@ -47,24 +44,24 @@ public partial class AgentForm : Form
     {
         if (cbxUseFunctionCalling.Checked)
         {
-            _kernel.Plugins.Add(KernelPluginFactory.CreateFromFunctions("WorkOrderHelperPlugin",
+            _kernel.Plugins.Add(KernelPluginFactory.CreateFromFunctions("WorkOrderHelper",
                 new List<KernelFunction>
                 {
                     _kernel.CreateFunctionFromMethod((string orderName) =>
                     {
                         var workOrderRepository = new WorkOrderService();
                         return workOrderRepository.GetWorkOrderInfo(orderName);
-                    }, "GetWorkOrderInfo", "Get WorkOrder's Detail Information"),
+                    }, "GetWorkOrderInfo", "获取指定工单的详细内容"),
                     _kernel.CreateFunctionFromMethod((string orderName, int newQuantity) =>
                     {
                         var workOrderRepository = new WorkOrderService();
                         return workOrderRepository.ReduceWorkOrderQuantity(orderName, newQuantity);
-                    }, "ReduceWorkOrderQuantity", "Reduce WorkOrder's Quantity to new Quantity"),
+                    }, "ReduceWorkOrderQuantity", "减少某个工单的生产数量"),
                     _kernel.CreateFunctionFromMethod((string orderName, string newStatus) =>
                     {
                         var workOrderRepository = new WorkOrderService();
                         return workOrderRepository.UpdateWorkOrderStatus(orderName, newStatus);
-                    }, "UpdateWorkOrderStatus", "Update WorkOrder's Status to new Status")
+                    }, "UpdateWorkOrderStatus", "更新某个工单的状态")
                 }
             ));
 
@@ -74,13 +71,6 @@ public partial class AgentForm : Form
             };
 
             lblTitle.Text = "WorkOrder Agent";
-        }
-        else
-        {
-            _kernel.Plugins.Clear();
-            _settings = null;
-
-            lblTitle.Text = "AI Chatbot";
         }
     }
 
@@ -96,15 +86,28 @@ public partial class AgentForm : Form
         }
 
         _chatHistory.AddUserMessage(tbxPrompt.Text);
-        ChatMessageContent chatResponse = null;
         tbxResponse.Clear();
 
-        if (cbxUseFunctionCalling.Checked)
+        if (cbxUseFunctionCalling.Checked && cbxUseFunctionPlanner.Checked)
         {
             Task.Run(() =>
             {
                 ShowProcessMessage("AI is handling your request now...");
-                chatResponse = _chatCompletion.GetChatMessageContentAsync(_chatHistory, _settings, _kernel)
+                var planner = new UniversalFunctionCaller(_kernel);
+                var chatResponse = planner.RunAsync(tbxPrompt.Text)
+                    .GetAwaiter()
+                    .GetResult();
+                UpdateResponseContent(chatResponse ?? string.Empty);
+                ShowProcessMessage("AI Response:");
+            });
+        }
+        else if (cbxUseFunctionCalling.Checked && !cbxUseFunctionPlanner.Checked)
+        {
+            Task.Run(() =>
+            {
+                ShowProcessMessage("AI is handling your request now...");
+                var _chatCompletion = _kernel.GetRequiredService<IChatCompletionService>();
+                var chatResponse = _chatCompletion.GetChatMessageContentAsync(_chatHistory, _settings, _kernel)
                     .GetAwaiter()
                     .GetResult();
                 UpdateResponseContent(chatResponse.ToString());
@@ -116,7 +119,8 @@ public partial class AgentForm : Form
             Task.Run(() =>
             {
                 ShowProcessMessage("AI is handling your request now...");
-                chatResponse = _chatCompletion.GetChatMessageContentAsync(_chatHistory, null, _kernel)
+                var _chatCompletion = _kernel.GetRequiredService<IChatCompletionService>();
+                var chatResponse = _chatCompletion.GetChatMessageContentAsync(_chatHistory, null, _kernel)
                     .GetAwaiter()
                     .GetResult();
                 UpdateResponseContent(chatResponse.ToString());
@@ -134,14 +138,14 @@ public partial class AgentForm : Form
             {
                 tbxResponse.Clear();
                 tbxResponse.Text = chatResponse;
-                _chatHistory.AddAssistantMessage(chatResponse.ToString());
+                _chatHistory.AddAssistantMessage(chatResponse);
             });
         }
         else
         {
             tbxResponse.Clear();
             tbxResponse.Text = chatResponse;
-            _chatHistory.AddAssistantMessage(chatResponse.ToString());
+            _chatHistory.AddAssistantMessage(chatResponse);
         }
     }
 

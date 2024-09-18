@@ -14,4 +14,10 @@ public static class ConfigConstants
         public const string OpenAIChatCompletions = "v1/chat/completions";
         public const string ZhiPuAIChatCompletions = "api/paas/v4/chat/completions";
     }
+
+    public static class FunctionCallStatus
+    {
+        public const string Start = "Start";
+        public const string Finished = "Finished";
+    }
 }

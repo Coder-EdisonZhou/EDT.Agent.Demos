@@ -146,3 +146,4 @@ UpgradeLog*.XML
 /src/.vs/EDT.WorkOrderAgent/DesignTimeBuild/*.v2
 /src/.vs/EDT.WorkOrderAgent/FileContentIndex/*.vsidx
 /src/.vs/EDT.WorkOrderAgent/v17/*.v2
+/src/EDT.WorkOrderAgent.Portal/appsettings.Local.json

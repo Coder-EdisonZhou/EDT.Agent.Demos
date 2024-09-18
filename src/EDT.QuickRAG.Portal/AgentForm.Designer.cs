@@ -121,7 +121,7 @@ partial class AgentForm
         tbxIndex.Name = "tbxIndex";
         tbxIndex.Size = new Size(147, 30);
         tbxIndex.TabIndex = 9;
-        tbxIndex.Text = "EDT";
+        tbxIndex.Text = "DEMO";
         // 
         // lblIndex
         // 

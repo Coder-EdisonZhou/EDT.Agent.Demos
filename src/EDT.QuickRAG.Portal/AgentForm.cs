@@ -92,6 +92,9 @@ public partial class AgentForm : Form
         }
     }
 
+    /// <summary>
+    /// Send the prompt to LLM and try to get response from RAG firstly
+    /// </summary>
     private void btnGetRagResponse_Click(object sender, EventArgs e)
     {
         if (_textMemory == null)
@@ -102,7 +105,7 @@ public partial class AgentForm : Form
 
         Task.Run(() =>
         {
-            var existingKnowledge = this.GetInformation(memoryResults).GetAwaiter().GetResult();
+            var existingKnowledge = this.BuildPromptInformation(memoryResults).GetAwaiter().GetResult();
             var integratedPrompt = @"
                                获取到的相关信息：[{0}]。
                                根据获取到的信息回答问题：[{1}]。
@@ -117,7 +120,7 @@ public partial class AgentForm : Form
         });
     }
 
-    #region Refresh Control Value Methods
+    #region UI Control Refresh Helper Methods
     private void UpdateResponseContent(string chatResponse)
     {
         if (tbxResponse.InvokeRequired)
@@ -153,7 +156,7 @@ public partial class AgentForm : Form
     }
     #endregion
 
-    #region Get Text Memory for Embedding Methods
+    #region Embedding Helper Function Methods
     private async Task<ISemanticTextMemory> GetTextMemory()
     {
         var memoryBuilder = new MemoryBuilder();
@@ -169,7 +172,7 @@ public partial class AgentForm : Form
         return textMemory;
     }
 
-    private async Task<string> GetInformation(IAsyncEnumerable<MemoryQueryResult> memoryResults)
+    private async Task<string> BuildPromptInformation(IAsyncEnumerable<MemoryQueryResult> memoryResults)
     {
         var information = string.Empty;
         await foreach (MemoryQueryResult memoryResult in memoryResults)

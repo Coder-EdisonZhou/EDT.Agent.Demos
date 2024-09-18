@@ -1,6 +1,6 @@
-﻿using EDT.WorkOrderAgent.Shared.Constants;
+﻿using EDT.Agent.Shared.Constants;
 
-namespace EDT.WorkOrderAgent.Shared.Handlers;
+namespace EDT.Agent.Shared.Handlers;
 
 public class OpenAiHttpHandler : HttpClientHandler
 {
@@ -42,6 +42,15 @@ public class OpenAiHttpHandler : HttpClientHandler
                         request.RequestUri = uriBuilder.Uri;
                         break;
                 }
+                break;
+            case "/v1/embeddings":
+                uriBuilder = new UriBuilder(request.RequestUri)
+                {
+                    Scheme = "https",
+                    Host = uri.Host,
+                    Path = "v1/embeddings",
+                };
+                request.RequestUri = uriBuilder.Uri;
                 break;
         }
 

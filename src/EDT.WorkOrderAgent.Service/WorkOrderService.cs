@@ -1,4 +1,5 @@
 ﻿using EDT.WorkOrderAgent.Service.Models;
+using System.Text.Json;
 
 namespace EDT.WorkOrderAgent.Service;
 
@@ -15,14 +16,23 @@ public class WorkOrderService : IWorkOrderService
             }; 
     #endregion
 
-    public WorkOrder GetWorkOrderInfo(string orderName)
+    public string GetWorkOrderInfo(string orderName)
+    {
+        var workOrder = workOrders.Find(o => o.WorkOrderName == orderName);
+        if (workOrder == null)
+            return "NotFound";
+
+        return JsonSerializer.Serialize(workOrder);
+    }
+
+    public WorkOrder GetWorkOrderModel(string orderName)
     {
         return workOrders.Find(o => o.WorkOrderName == orderName);
     }
 
     public string UpdateWorkOrderStatus(string orderName, string newStatus)
     {
-        var workOrder = this.GetWorkOrderInfo(orderName);
+        var workOrder = this.GetWorkOrderModel(orderName);
         if (workOrder == null)
             return "Operate Failed : The work order is not existing!";
         // Update status if it is valid
@@ -32,7 +42,7 @@ public class WorkOrderService : IWorkOrderService
 
     public string ReduceWorkOrderQuantity(string orderName, int newQuantity)
     {
-        var workOrder = this.GetWorkOrderInfo(orderName);
+        var workOrder = this.GetWorkOrderModel(orderName);
         if (workOrder == null)
             return "Operate Failed : The work order is not existing!";
 

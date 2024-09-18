@@ -1,4 +1,4 @@
-﻿namespace EDT.WorkOrderAgent.Shared.Constants;
+﻿namespace EDT.Agent.Shared.Constants;
 
 public static class ConfigConstants
 {
@@ -7,6 +7,7 @@ public static class ConfigConstants
         public const string OpenAI = "OpenAI";
         public const string ZhiPuAI = "ZhiPuAI";
         public const string QwenAI = "QwenAI";
+        public const string SiliconCloud = "SiliconCloud";
     }
 
     public static class LLMApiPaths

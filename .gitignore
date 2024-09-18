@@ -147,3 +147,12 @@ UpgradeLog*.XML
 /src/.vs/EDT.WorkOrderAgent/FileContentIndex/*.vsidx
 /src/.vs/EDT.WorkOrderAgent/v17/*.v2
 /src/EDT.WorkOrderAgent.Portal/appsettings.Local.json
+/src/EDT.WorkOrderAgent.Portal/appsettings.Qwen.json
+/src/EDT.WorkOrderAgent.Portal/appsettings.ZhiPu.json
+/src/EDT.QuickRAG.Portal/appsettings.Qwen.json
+/src/EDT.QuickRAG.Portal/appsettings.Local.json
+/src/.vs/EDT.Agent.Demos/DesignTimeBuild/*.v2
+/src/.vs/EDT.Agent.Demos/FileContentIndex/*.vsidx
+/src/.vs/EDT.Agent.Demos/config/*.config
+/src/.vs/EDT.Agent.Demos/v17/*.v2
+/src/.vs/EDT.Agent.Demos/v17/*.json

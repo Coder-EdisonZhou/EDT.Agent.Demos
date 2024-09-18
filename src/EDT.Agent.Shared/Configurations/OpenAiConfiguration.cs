@@ -1,6 +1,6 @@
-﻿using EDT.WorkOrderAgent.Shared.Constants;
+﻿using EDT.Agent.Shared.Constants;
 
-namespace EDT.WorkOrderAgent.Shared.Configurations;
+namespace EDT.Agent.Shared.Configurations;
 
 public class OpenAiConfiguration
 {

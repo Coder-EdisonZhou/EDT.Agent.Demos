@@ -10,14 +10,14 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="appsettings.Qwen.json" />
+    <None Remove="appsettings.Local.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="appsettings.Qwen.json">
+    <Content Include="appsettings.Local.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -26,10 +26,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.19.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.19.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EDT.WorkOrderAgent.Service\EDT.WorkOrderAgent.Service.csproj" />
     <ProjectReference Include="..\EDT.Agent.Shared\EDT.Agent.Shared.csproj" />
   </ItemGroup>
 

@@ -2,10 +2,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel;
-using EDT.WorkOrderAgent.Shared.Configurations;
-using EDT.WorkOrderAgent.Shared.Handlers;
+using EDT.Agent.Shared.Configurations;
+using EDT.Agent.Shared.Handlers;
 using EDT.WorkOrderAgent.Service;
-using EDT.WorkOrderAgent.Shared.FunctionCallers;
+using EDT.Agent.Shared.FunctionCallers;
 
 namespace EDT.WorkOrderAgent.Portal;
 
@@ -22,7 +22,7 @@ public partial class AgentForm : Form
 
     private void AgentForm_Load(object sender, EventArgs e)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.Local.json");
+        var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.Qwen.json");
         var config = configuration.Build();
         var openAiConfiguration = new OpenAiConfiguration(
             config.GetSection("LLM_API_PROVIDER").Value,

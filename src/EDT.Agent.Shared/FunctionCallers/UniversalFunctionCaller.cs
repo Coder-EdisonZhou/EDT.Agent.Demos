@@ -1,10 +1,10 @@
-﻿using EDT.WorkOrderAgent.Shared.Constants;
+﻿using EDT.Agent.Shared.Constants;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace EDT.WorkOrderAgent.Shared.FunctionCallers;
+namespace EDT.Agent.Shared.FunctionCallers;
 
 public class UniversalFunctionCaller
 {

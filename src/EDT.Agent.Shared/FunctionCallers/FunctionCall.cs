@@ -1,4 +1,4 @@
-﻿namespace EDT.WorkOrderAgent.Shared.FunctionCallers;
+﻿namespace EDT.Agent.Shared.FunctionCallers;
 
 internal class FunctionCall
 {

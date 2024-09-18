@@ -40,7 +40,9 @@ public class UniversalFunctionCaller
         chatHistory.Add(new ChatMessageContent(AuthorRole.User, $"New task: {task}"));
 
         // Process function calls
-        for (int iteration = 0; iteration < 10 && nextFunctionCall.Name != ConfigConstants.FunctionCallStatus.Finished; iteration++)
+        for (int iteration = 0;
+            iteration < 10 && nextFunctionCall.Name != ConfigConstants.FunctionCallStatus.Finished;
+            iteration++)
         {
             nextFunctionCall = await GetNextFunctionCallAsync(chatHistory, pluginsAsText);
             if (nextFunctionCall == null) 
@@ -96,7 +98,7 @@ public class UniversalFunctionCaller
         history.Add(new ChatMessageContent(AuthorRole.Assistant, "StartSpaceship(ship_name: \"长征七号\")"));
         history.Add(new ChatMessageContent(AuthorRole.User, "飞船启动"));
         history.Add(new ChatMessageContent(AuthorRole.Assistant, "Finished(finalmessage: \"'长征七号'飞船启动 \")"));
-        history.Add(new ChatMessageContent(AuthorRole.User, $"New task: {ask}"));
+        //history.Add(new ChatMessageContent(AuthorRole.User, $"New task: {ask}"));
 
         return history;
     }
@@ -167,6 +169,7 @@ What function should the user execute next on the computer? Explain your reasoni
 ";
         return systemPrompt;
     }
+
     private string GetLoopSystemMessage(string pluginsAsTextPrompt3000)
     {
         var systemPrompt = $@"你是一个计算机系统。

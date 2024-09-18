@@ -11,6 +11,9 @@ using Microsoft.SemanticKernel.Text;
 
 namespace EDT.QuickRAG.Portal;
 
+/// <summary>
+/// Need to add the below code to disable warnings about SemanticKernel.Connectors.Sqlite
+/// </summary>
 #pragma warning disable SKEXP0050
 #pragma warning disable SKEXP0001
 #pragma warning disable SKEXP0020
@@ -101,8 +104,8 @@ public partial class AgentForm : Form
         {
             var existingKnowledge = this.GetInformation(memoryResults).GetAwaiter().GetResult();
             var integratedPrompt = @"
-                               获取到的相关信息：{0}。
-                               根据获取到的信息回答问题：{1}。
+                               获取到的相关信息：[{0}]。
+                               根据获取到的信息回答问题：[{1}]。
                                如果没有获取到相关信息，请直接回答 Sorry不知道。
                             ";
             ShowProcessMessage("AI is handling your request now...");

@@ -18,40 +18,41 @@ public class OpenAiHttpHandler : HttpClientHandler
     {
         UriBuilder uriBuilder;
         var uri = new Uri(_openAiBaseAddress);
-        switch (request.RequestUri?.LocalPath)
+        if (request.RequestUri?.LocalPath == "v1/chat/completions"
+            || request.RequestUri?.LocalPath == "/v1/chat/completions") // Chatting
         {
-            case "/v1/chat/completions":
-                switch (_openAiProvider)
-                {
-                    case ConfigConstants.LLMApiProviders.ZhiPuAI:
-                        uriBuilder = new UriBuilder(request.RequestUri)
-                        {
-                            Scheme = "https",
-                            Host = uri.Host,
-                            Path = ConfigConstants.LLMApiPaths.ZhiPuAIChatCompletions,
-                        };
-                        request.RequestUri = uriBuilder.Uri;
-                        break;
-                    default: // Default: OpenAI-Compatible API Providers
-                        uriBuilder = new UriBuilder(request.RequestUri)
-                        {
-                            Scheme = "https",
-                            Host = uri.Host,
-                            Path = ConfigConstants.LLMApiPaths.OpenAIChatCompletions,
-                        };
-                        request.RequestUri = uriBuilder.Uri;
-                        break;
-                }
-                break;
-            case "/v1/embeddings":
-                uriBuilder = new UriBuilder(request.RequestUri)
-                {
-                    Scheme = "https",
-                    Host = uri.Host,
-                    Path = "v1/embeddings",
-                };
-                request.RequestUri = uriBuilder.Uri;
-                break;
+            switch (_openAiProvider)
+            {
+                case ConfigConstants.LLMApiProviders.ZhiPuAI: // ZhiPu is not OpenAI-Compatible
+                    uriBuilder = new UriBuilder(request.RequestUri)
+                    {
+                        Scheme = "https",
+                        Host = uri.Host,
+                        Path = ConfigConstants.LLMApiPaths.ZhiPuAIChatCompletions,
+                    };
+                    request.RequestUri = uriBuilder.Uri;
+                    break;
+                default: // Default: OpenAI-Compatible API Providers
+                    uriBuilder = new UriBuilder(request.RequestUri)
+                    {
+                        Scheme = "https",
+                        Host = uri.Host,
+                        Path = ConfigConstants.LLMApiPaths.OpenAIChatCompletions,
+                    };
+                    request.RequestUri = uriBuilder.Uri;
+                    break;
+            }
+        }
+        else if(request.RequestUri?.LocalPath == "/v1/embeddings"
+            || request.RequestUri?.LocalPath == "/v1/embeddings") // Embedding
+        {
+            uriBuilder = new UriBuilder(request.RequestUri)
+            {
+                Scheme = "https",
+                Host = uri.Host,
+                Path = ConfigConstants.LLMApiPaths.OpenAIEmbedding,
+            };
+            request.RequestUri = uriBuilder.Uri;
         }
 
         var response = await base.SendAsync(request, cancellationToken);

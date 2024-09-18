@@ -14,6 +14,7 @@ public partial class AgentForm : Form
     private Kernel _kernel = null;
     private OpenAIPromptExecutionSettings _settings = null;
     private ChatHistory _chatHistory = null;
+    private IWorkOrderService _workOrderService = null;
 
     public AgentForm()
     {
@@ -35,6 +36,7 @@ public partial class AgentForm : Form
             .Build();
 
         _chatHistory = new ChatHistory();
+        _workOrderService = new WorkOrderService();
     }
 
     /// <summary>
@@ -49,18 +51,15 @@ public partial class AgentForm : Form
                 {
                     _kernel.CreateFunctionFromMethod((string orderName) =>
                     {
-                        var workOrderRepository = new WorkOrderService();
-                        return workOrderRepository.GetWorkOrderInfo(orderName);
-                    }, "GetWorkOrderInfo", "获取指定工单的详细内容"),
+                        return _workOrderService.GetWorkOrderInfo(orderName);
+                    }, "GetWorkOrderDetails", "获取某个工单的详细内容"),
                     _kernel.CreateFunctionFromMethod((string orderName, int newQuantity) =>
                     {
-                        var workOrderRepository = new WorkOrderService();
-                        return workOrderRepository.ReduceWorkOrderQuantity(orderName, newQuantity);
+                        return _workOrderService.ReduceWorkOrderQuantity(orderName, newQuantity);
                     }, "ReduceWorkOrderQuantity", "减少某个工单的生产数量"),
                     _kernel.CreateFunctionFromMethod((string orderName, string newStatus) =>
                     {
-                        var workOrderRepository = new WorkOrderService();
-                        return workOrderRepository.UpdateWorkOrderStatus(orderName, newStatus);
+                        return _workOrderService.UpdateWorkOrderStatus(orderName, newStatus);
                     }, "UpdateWorkOrderStatus", "更新某个工单的状态")
                 }
             ));
@@ -132,6 +131,8 @@ public partial class AgentForm : Form
     #region Refresh Control Value Methods
     private void UpdateResponseContent(string chatResponse)
     {
+        chatResponse = chatResponse.Replace(@"\n", Environment.NewLine);
+
         if (tbxResponse.InvokeRequired)
         {
             tbxResponse.Invoke(() =>

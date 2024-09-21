@@ -37,10 +37,10 @@ public partial class ChatForm : Form
         var configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.Local.json");
         var config = configuration.Build();
         var chattingApiConfiguration = new OpenAiConfiguration(
-            config.GetSection("Chatting:API_PROVIDER").Value,
-            config.GetSection("Chatting:API_MODEL").Value,
-            config.GetSection("Chatting:API_BASE_URL").Value,
-            config.GetSection("Chatting:API_KEY").Value);
+            config.GetSection("OpenAI:API_PROVIDER").Value,
+            config.GetSection("OpenAI:API_CHATTING_MODEL").Value,
+            config.GetSection("OpenAI:API_BASE_URL").Value,
+            config.GetSection("OpenAI:API_KEY").Value);
         var chattingApiHandler = new OpenAiHttpHandler(chattingApiConfiguration.Provider, chattingApiConfiguration.EndPoint);
         var openAiChattingClient = new HttpClient(chattingApiHandler);
         _kernel = Kernel.CreateBuilder()
@@ -48,10 +48,10 @@ public partial class ChatForm : Form
             .Build();
 
         _embeddingApiConfiguration = new OpenAiConfiguration(
-            config.GetSection("Embedding:API_PROVIDER").Value,
-            config.GetSection("Embedding:API_MODEL").Value,
-            config.GetSection("Embedding:API_BASE_URL").Value,
-            config.GetSection("Embedding:API_KEY").Value);
+            config.GetSection("OpenAI:API_PROVIDER").Value,
+            config.GetSection("OpenAI:API_EMBEDDING_MODEL").Value,
+            config.GetSection("OpenAI:API_BASE_URL").Value,
+            config.GetSection("OpenAI:API_KEY").Value);
         _textChunkerLinesToken = Convert.ToInt32(config["TextChunker:LinesToken"]);
         _textChunkerParagraphsToken = Convert.ToInt32(config["TextChunker:ParagraphsToken"]);
 

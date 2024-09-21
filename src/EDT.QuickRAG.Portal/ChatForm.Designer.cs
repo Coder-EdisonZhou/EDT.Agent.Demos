@@ -87,9 +87,9 @@ partial class ChatForm
         lblResponse.Location = new Point(665, 133);
         lblResponse.Margin = new Padding(5, 0, 5, 0);
         lblResponse.Name = "lblResponse";
-        lblResponse.Size = new Size(199, 40);
+        lblResponse.Size = new Size(172, 40);
         lblResponse.TabIndex = 4;
-        lblResponse.Text = "RAG Response:";
+        lblResponse.Text = "AI Response:";
         // 
         // btnEmbedding
         // 
@@ -109,7 +109,7 @@ partial class ChatForm
         btnGetRagResponse.Name = "btnGetRagResponse";
         btnGetRagResponse.Size = new Size(145, 46);
         btnGetRagResponse.TabIndex = 8;
-        btnGetRagResponse.Text = "Get Response";
+        btnGetRagResponse.Text = "Send";
         btnGetRagResponse.UseVisualStyleBackColor = true;
         btnGetRagResponse.Click += btnGetRagResponse_Click;
         // 
@@ -134,7 +134,7 @@ partial class ChatForm
         lblIndex.TabIndex = 10;
         lblIndex.Text = "Index:";
         // 
-        // AgentForm
+        // ChatForm
         // 
         AutoScaleDimensions = new SizeF(11F, 24F);
         AutoScaleMode = AutoScaleMode.Font;
@@ -151,7 +151,7 @@ partial class ChatForm
         Controls.Add(lblTitle);
         Margin = new Padding(5);
         MaximizeBox = false;
-        Name = "AgentForm";
+        Name = "ChatForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "AI Chat";
         Load += AgentForm_Load;

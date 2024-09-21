@@ -88,6 +88,7 @@ public partial class ChatForm : Form
                 .GetAwaiter()
                 .GetResult();
                 ShowProcessMessage("Embedding success!");
+                MessageBox.Show("Embedding success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             });
         }
     }
@@ -116,7 +117,7 @@ public partial class ChatForm : Form
                 .GetAwaiter()
                 .GetResult();
             UpdateResponseContent(response.ToString());
-            ShowProcessMessage("RAG Response:");
+            ShowProcessMessage("AI Response:");
         });
     }
 
